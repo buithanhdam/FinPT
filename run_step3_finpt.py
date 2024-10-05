@@ -16,15 +16,14 @@ from sklearn.metrics import accuracy_score, f1_score
 
 import torch
 from datasets import load_dataset, Dataset
-from huggingface_hub import login
 
 from transformers import Trainer, TrainingArguments
 from transformers import BertTokenizer, GPT2Tokenizer, T5Tokenizer, LlamaTokenizer
 
-from model.finpt_bert import FinptBertForSequenceClassification
-from model.finpt_llama import FinptLlamaForSequenceClassification
-from model.finpt_t5 import FinptT5ForSequenceClassification
-from model.finpt_gpt import FinptGPT2ForSequenceClassification
+from model.finpt_bert import FinptBert
+from model.finpt_llama import FinptLlama
+from model.finpt_t5 import FinptT5
+from model.finpt_gpt import FinptGPT2
 from utils.seed import set_seed
 
 

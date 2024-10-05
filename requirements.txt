@@ -2,11 +2,12 @@ deepspeed
 git+https://github.com/huggingface/transformers
 torch
 wandb
-openai
 datasets
 evaluate
-numpy
-pandas
+pandas==2.2.3
+openpyxl==3.1.5
+google-generativeai==0.8.2
+python-dotenv==1.0.1
 pillow
 matplotlib
 scikit-learn

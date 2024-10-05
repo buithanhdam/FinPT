@@ -28,7 +28,7 @@ from transformers import T5Config, T5PreTrainedModel, AutoTokenizer
     """,
     T5_START_DOCSTRING
 )
-class FinptT5ForSequenceClassification(T5PreTrainedModel):
+class FinptT5(T5PreTrainedModel):
     _keys_to_ignore_on_load_unexpected = [
         "decoder.block.0.layer.1.EncDecAttention.relative_attention_bias.weight",
     ]

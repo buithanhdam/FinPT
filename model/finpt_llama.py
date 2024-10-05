@@ -33,7 +33,7 @@ from transformers import LlamaModel, LlamaPreTrainedModel
     """,
     LLAMA_START_DOCSTRING,
 )
-class FinptLlamaForSequenceClassification(LlamaPreTrainedModel):
+class FinptLlama(LlamaPreTrainedModel):
     _keys_to_ignore_on_load_missing = [r"classifier.weight"]
 
     def __init__(self, config):

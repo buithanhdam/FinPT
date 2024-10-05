@@ -29,7 +29,7 @@ from transformers.models.bert.modeling_bert import BertModel, BertPreTrainedMode
     """,
     BERT_START_DOCSTRING,
 )
-class FinptBertForSequenceClassification(BertPreTrainedModel):
+class FinptBert(BertPreTrainedModel):
     _CHECKPOINT_FOR_DOC = "bert-base-uncased"
     _CONFIG_FOR_DOC = "BertConfig"
 
