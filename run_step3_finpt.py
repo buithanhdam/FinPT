@@ -160,7 +160,7 @@ if __name__ == "__main__":
         model_class = "bert"
         hf_model_id = "bert-base-cased"
         tokenizer = BertTokenizer.from_pretrained(hf_model_id, cache_dir=cache_model)
-        model = FinptBertForSequenceClassification.from_pretrained(
+        model = FinptBert.from_pretrained(
             hf_model_id, num_labels=2, cache_dir=cache_model)
         fp8 = False
         freeze = False
@@ -168,7 +168,7 @@ if __name__ == "__main__":
         model_class = "bert"
         hf_model_id = "yiyanghkust/finbert-pretrain"
         tokenizer = BertTokenizer.from_pretrained(hf_model_id, cache_dir=cache_model)
-        model = FinptBertForSequenceClassification.from_pretrained(
+        model = FinptBert.from_pretrained(
             hf_model_id, num_labels=2, cache_dir=cache_model)
         fp8 = False
         freeze = False
@@ -176,49 +176,49 @@ if __name__ == "__main__":
         model_class = "gpt"
         hf_model_id = "gpt2"
         tokenizer = GPT2Tokenizer.from_pretrained(hf_model_id, cache_dir=cache_model)
-        model = FinptGPT2ForSequenceClassification.from_pretrained(
+        model = FinptGPT2.from_pretrained(
             hf_model_id, cache_dir=cache_model, load_in_8bit=fp8)
         freeze = False
     elif model_name == "t5-base":
         model_class = "t5"
         hf_model_id = "t5-base"
         tokenizer = T5Tokenizer.from_pretrained(hf_model_id, cache_dir=cache_model)
-        model = FinptT5ForSequenceClassification.from_pretrained(
+        model = FinptT5.from_pretrained(
             hf_model_id, cache_dir=cache_model, load_in_8bit=fp8)
         freeze = False
     elif model_name == "flan-t5-base":
         model_class = "t5"
         hf_model_id = "google/flan-t5-base"
         tokenizer = T5Tokenizer.from_pretrained(hf_model_id, cache_dir=cache_model)
-        model = FinptT5ForSequenceClassification.from_pretrained(
+        model = FinptT5.from_pretrained(
             hf_model_id, cache_dir=cache_model, load_in_8bit=fp8)
         freeze = False
     elif model_name == "t5-xxl":
         model_class = "t5"
         hf_model_id = "t5-11b"
         tokenizer = T5Tokenizer.from_pretrained(hf_model_id, cache_dir=cache_model)
-        model = FinptT5ForSequenceClassification.from_pretrained(
+        model = FinptT5.from_pretrained(
             hf_model_id, cache_dir=cache_model, load_in_8bit=fp8)
         freeze = True
     elif model_name == "flan-t5-xxl":
         model_class = "t5"
         hf_model_id = "google/flan-t5-xxl"
         tokenizer = T5Tokenizer.from_pretrained(hf_model_id, cache_dir=cache_model)
-        model = FinptT5ForSequenceClassification.from_pretrained(
+        model = FinptT5.from_pretrained(
             hf_model_id, cache_dir=cache_model, load_in_8bit=fp8)
         freeze = True
     elif model_name == "llama-7b":
         model_class = "llama"
         hf_model_id = "openlm-research/open_llama_7b"
         tokenizer = LlamaTokenizer.from_pretrained(hf_model_id, cache_dir=cache_model)
-        model = FinptLlamaForSequenceClassification.from_pretrained(
+        model = FinptLlama.from_pretrained(
             hf_model_id, cache_dir=cache_model, load_in_8bit=fp8)
         freeze = True
     elif model_name == "llama-13b":
         model_class = "llama"
         hf_model_id = "openlm-research/open_llama_13b"
         tokenizer = LlamaTokenizer.from_pretrained(hf_model_id, cache_dir=cache_model)
-        model = FinptLlamaForSequenceClassification.from_pretrained(
+        model = FinptLlama.from_pretrained(
             hf_model_id, cache_dir=cache_model, load_in_8bit=fp8)
         freeze = True
     else:

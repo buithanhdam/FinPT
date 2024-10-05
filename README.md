@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![arXiv](https://img.shields.io/badge/arXiv-2308.00065-b31b1b.svg)](https://arxiv.org/abs/2308.00065)
 ## Author **YuweiYin - FinPT**
-[![github](https://commons.wikimedia.org/wiki/File:Octicons-mark-github.svg)](https://github.com/YuweiYin/FinPT/tree/master)
+[![github]](https://github.com/YuweiYin/FinPT/tree/master)
 
 ![picture](https://yuweiyin.com/files/img/2023-07-22-FinPT.png)
 
