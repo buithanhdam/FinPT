@@ -6,9 +6,7 @@ import logging
 import argparse
 import random
 import dotenv
-from google.api_core.exceptions import ResourceExhausted
 import google.generativeai as genai
-from concurrent.futures import ThreadPoolExecutor
 
 dotenv.load_dotenv()
 
@@ -28,57 +26,33 @@ def parse_arguments() -> argparse.Namespace:
     return parser.parse_args()
 
 def setup_environment() -> str:
-
     profile_root_dir = os.path.join("./output")
     os.makedirs(profile_root_dir, exist_ok=True)
     return profile_root_dir
 
 def setup_gemini(model_name:str = 'gemini-1.5-flash') -> genai.GenerativeModel:
-
     genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
     return genai.GenerativeModel(model_name)
 
 def get_file_paths(profile_dir: str, ds_name: str):
-
     instruction_path = os.path.join(profile_dir, f"instruction_for_profile_{ds_name}.jsonl")
     train_path = os.path.join(profile_dir, f"profile_{ds_name}_train.jsonl")
     val_path = os.path.join(profile_dir, f"profile_{ds_name}_validation.jsonl")
     test_path = os.path.join(profile_dir, f"profile_{ds_name}_test.jsonl")
     return instruction_path, train_path, val_path, test_path
 
-def process_instruction(model: genai.GenerativeModel, instruction: str,logger: logging.Logger,retries:int=3, initial_wait:int=1) -> str:
-
-    wait_time = initial_wait
-    for attempt in range(retries):
-        try:
-            response = model.generate_content([
-                "You are a helpful financial assistant.",
-                instruction
-            ], generation_config=genai.types.GenerationConfig(
-                temperature=0.1,
-            ))
-            return response.text.strip()
-        except ResourceExhausted as e:
-            if attempt < retries - 1:
-                logger.warning(f"!!Resource exhausted. Retrying in {wait_time} seconds...")
-                time.sleep(wait_time)
-                wait_time *= 2 + random.uniform(0, 0.5)  # Exponential backoff với jitter
-            else:
-                logger.error(f"Failed after {retries} retries: {e}")
-                return None
+def process_instruction(model: genai.GenerativeModel,count:int, instruction: str) -> str:
+    response = model.generate_content([
+        "You are a helpful financial assistant.\n",
+        instruction
+    ], generation_config=genai.types.GenerationConfig(
+        temperature=0.1,
+    ))
+    return response.text.strip()
 
 def write_response(fp_out, response: str):
     res_json = json.dumps(response)
     fp_out.write(res_json + "\n")
-
-def process_line(model, line, logger, split_name, index):
-    instruction = str(json.loads(line.strip()))
-    response = process_instruction(model, instruction)
-    if response is None:
-        logger.warning(f"Failed process instruction for index: {index}")
-    if (index + 1) % 50 == 0:
-        logger.info(f">>> Processed {index + 1} items for {split_name} set")
-    return response
 
 def split_and_process_file(instruction_path: str, train_path: str, val_path: str, test_path: str, 
                            model: genai.GenerativeModel, train_ratio: float, val_ratio: float, logger: logging.Logger):
@@ -98,15 +72,22 @@ def split_and_process_file(instruction_path: str, train_path: str, val_path: str
 
     for data, path, split_name in datasets:
         with open(path, "w", encoding="utf-8") as fp_out:
-            with ThreadPoolExecutor(max_workers=2) as executor:
-                futures = [executor.submit(process_line, model, line, logger, split_name, i) for i, line in enumerate(data)]
-                
-                for i, future in enumerate(futures):
-                    response = future.result()
-                    if response is None:
-                        continue
+            count = 0
+            instructions = ""
+            for i, line in enumerate(data):
+                instruction = f"Index row {i+1}:"+str(json.loads(line.strip()))+"\n"
+                instructions+=instruction
+                count+=1
+                if count ==20:
+                    response = process_instruction(model,count, instructions)
                     write_response(fp_out, response)
+                    logger.info(f">>> Processed {i+1} items for {split_name} set")
+                    count = 0
+                    instructions = ""
                     time.sleep(0.1)
+            response = process_instruction(model, instructions)
+            write_response(fp_out, response)
+            logger.info(f">>> Processed {count} items for {split_name} set")
 
         logger.info(f">>> DONE: [{split_name}] processed {len(data)} items")
 

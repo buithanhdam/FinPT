@@ -57,7 +57,11 @@ def process_data(data, dataset_name, output_dir, logger):
 
 def create_profile(row):
     profile_instruction = "Construct a concise inventory time-series profile description " \
-                          "including all the following information:\n"
+                          "including all the following information:\n"\
+                            "Frequency of data points (e.g., daily, weekly, monthly)\n"\
+                            "Any significant trends, patterns, or anomalies observed\n"\
+                            "Seasonality or cyclical patterns if present\n"\
+                            "time-series data:\n"
     for column, value in row.items():
         profile_instruction += f"{column}: {value};\n"
     return profile_instruction.strip()
